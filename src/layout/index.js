@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 import './index.scss'
 import Nav from './Sider/menu'
+import View from './Content';
 const { Header, Footer, Sider, Content } = Layout;
 
 function Wrapper() {
@@ -12,7 +13,9 @@ function Wrapper() {
       </Sider>
       <Layout>
         <Header>Header</Header>
-        <Content>Content</Content>
+        <Content>
+          <View></View>
+        </Content>
         <Footer>Footer</Footer>
       </Layout>
     </Layout>
