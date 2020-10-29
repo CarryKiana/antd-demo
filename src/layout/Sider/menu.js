@@ -5,9 +5,34 @@ import './menu.scss';
 import { createBrowserHistory } from 'history'
 const history = createBrowserHistory()
 const { SubMenu }  = Menu;
+let _unListen;
 class Nav extends React.Component {
   state = {
-    openKeys: ['sub1']
+    openKeys: [],
+    selectedKeys: []
+  }
+  constructor(props) {
+    super(props)
+    const openKey = history.location.pathname.match(/\/[^/]+/)
+    this.state.openKeys = openKey ? [...openKey] : []
+    this.state.selectedKeys = [history.location.pathname]
+  }
+  componentDidMount() {
+    _unListen = history.listen(res => {
+      const { location } = res
+      console.log(location)
+      this.urlChange()
+    })
+  }
+  componentWillUnmount() {
+    _unListen && _unListen()
+  }
+  urlChange = () => {
+    const openKey = history.location.pathname.match(/\/[^/]+/)
+    this.setState({
+      openKeys: openKey ? [...openKey] : [],
+      selectedKeys: [history.location.pathname]
+    })
   }
   onOpenChange = openKeys => {
     if (openKeys.length) {
@@ -21,7 +46,6 @@ class Nav extends React.Component {
     }
   }
   onClick = obj => {
-    console.log(obj)
     history.push(obj.key)
   }
   render() {
@@ -47,6 +71,7 @@ class Nav extends React.Component {
         <Menu
           mode="inline"
           openKeys={this.state.openKeys}
+          selectedKeys={this.state.selectedKeys}
           onOpenChange={this.onOpenChange}
           onClick={this.onClick}
         >
