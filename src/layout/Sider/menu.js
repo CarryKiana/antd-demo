@@ -81,7 +81,11 @@ class Nav extends React.Component {
     );
   }
 }
-
+// 需要用Router包住整个应用，不能随心所欲调用
+// 函数式编程跳转路由可以使用withRouter或useHistory
+// 只有函数式组件才能使用useHistory
+// 使用useHistory的组件需要放在Router组件内，否则useHistory()为undefined
+// 感觉这样的限制没有啥意义，好low啊
 function HistoryNav() {
   let history = useHistory();
   return (
