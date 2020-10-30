@@ -1,15 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import basic from 'views/report/basic'
+import React, { Suspense } from 'react';
+import { Route, Link } from 'react-router-dom';
 
-import { asyncComponent } from 'router/asyncComponent'
-import { load } from 'router/load'
+const basic = React.lazy(() => import('views/report/basic'))
+const personas = React.lazy(() => import('views/report/personas'))
+
+
 export default class View extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      views: basic
-    }
+    this.state = {}
   }
   componentDidMount() {
 
@@ -19,10 +18,15 @@ export default class View extends React.Component {
   }
   render() {
     return (
-      <Router>
-        <Route path="/" exact component={this.state.views}></Route>
-        <Route path="/report/personas" component={ asyncComponent(() => load('/report/personas')) }></Route>
-      </Router>
+      <>
+        <Link to="/">1</Link>
+        <Link to="/report/interaction">2</Link>
+        <Link to="/report/personas">3</Link>
+        <Suspense fallback={ <div>Loading...</div> }>
+          <Route path="/report/interaction" exact component={basic}></Route>
+          <Route path="/report/personas" component={personas}></Route>
+        </Suspense>
+      </>
     )
   }
 }

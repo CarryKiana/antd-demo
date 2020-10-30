@@ -2,8 +2,8 @@ import React from 'react';
 import { Menu } from 'antd';
 import { routerMap } from 'router/data'
 import './menu.scss';
-import { createBrowserHistory } from 'history'
-const history = createBrowserHistory()
+import { useHistory } from 'react-router-dom';
+
 const { SubMenu }  = Menu;
 let _unListen;
 class Nav extends React.Component {
@@ -13,14 +13,12 @@ class Nav extends React.Component {
   }
   constructor(props) {
     super(props)
-    const openKey = history.location.pathname.match(/\/[^/]+/)
+    const openKey = this.props.history.location.pathname.match(/\/[^/]+/)
     this.state.openKeys = openKey ? [...openKey] : []
-    this.state.selectedKeys = [history.location.pathname]
+    this.state.selectedKeys = [this.props.history.location.pathname]
   }
   componentDidMount() {
-    _unListen = history.listen(res => {
-      const { location } = res
-      console.log(location)
+    _unListen = this.props.history.listen(() => {
       this.urlChange()
     })
   }
@@ -28,10 +26,10 @@ class Nav extends React.Component {
     _unListen && _unListen()
   }
   urlChange = () => {
-    const openKey = history.location.pathname.match(/\/[^/]+/)
+    const openKey = this.props.history.location.pathname.match(/\/[^/]+/)
     this.setState({
       openKeys: openKey ? [...openKey] : [],
-      selectedKeys: [history.location.pathname]
+      selectedKeys: [this.props.history.location.pathname]
     })
   }
   onOpenChange = openKeys => {
@@ -46,7 +44,7 @@ class Nav extends React.Component {
     }
   }
   onClick = obj => {
-    history.push(obj.key)
+    this.props.history.push(obj.key)
   }
   render() {
     let map = routerMap.map((sub) => {
@@ -84,4 +82,11 @@ class Nav extends React.Component {
   }
 }
 
-export default Nav
+function HistoryNav() {
+  let history = useHistory();
+  return (
+    <Nav history={history}></Nav>
+  );
+}
+
+export default HistoryNav
