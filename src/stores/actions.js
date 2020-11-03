@@ -8,7 +8,15 @@ export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 /**
  * 其他的常量
  */
+export const VisibilityFilters = {
+  SHOW_ALL: 'SHOW_ALL',
+  SHOW_COMPLETED: 'SHOW_COMPLETED',
+  SHOW_ACTIVE: 'SHOW_ACTIVE'
+}
 
+/**
+ * action 创建函数
+ */
 export function addTodo(text) {
   return { type: ADD_TODO, text }
 }
