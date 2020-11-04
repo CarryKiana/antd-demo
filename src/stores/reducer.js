@@ -1,9 +1,22 @@
+import { act } from 'react-dom/test-utils'
 import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
 
 const initialState = {
   visibilityFilter: VisibilityFilters.SHOW_ALL,
   todos: []
 }
+
+const  { SHOW_ALL } = VisibilityFilters
+
+function visibilityFilter(state = SHOW_ALL, action) {
+  switch (action.type) {
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
+  }
+}
+
 function todos(state = [], action) {
   switch (action.type) {
     case ADD_TODO:
@@ -30,21 +43,9 @@ function todos(state = [], action) {
   }
 }
 
-function todoApp(state = initialState, action) {
-  switch(action.type) {
-    case SET_VISIBILITY_FILTER:
-      return Object.assign({}, state, {
-        visibilityFilter: action.filter
-      })
-    case ADD_TODO:
-      return Object.assign({}, state, {
-        todos: todos[state.todos, action]
-      })
-    case TOGGLE_TODO:
-      return Object.assign({}, state, {
-        todos: todos[state.todos, action]
-      })
-    default:
-      return state
+export default function todoApp(state = {}, action) {
+  return {
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+    todos: todos(state.todos, action)
   }
 }
